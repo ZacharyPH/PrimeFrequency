@@ -3,14 +3,20 @@ import requests
 from zipfile import ZipFile
 
 
+class PrimeNumbers:
+    # TODO: Implement this with each of the below functions, as well as a new function that returns an arbitrary number
+    #       of primes numbers in a list. Potentially, this function could instead return a generator (yield)
+    pass
+
+
 def main(refresh=False):
     zips_range = range(1, 50 + 1)
 
-    refetch = get_reloads("./prime_zips/", "zip", 1500)  # if not refresh else zips_range
+    refetch = get_reloads("./prime_zips/", extension="zip", min_size=1500) if not refresh else zips_range
     download_prime_zips(portion=refetch)
-    unzip = get_reloads("./prime_tables/", "txt", 10 * 1000 * 1000) if not refresh else zips_range
+    unzip = get_reloads("./prime_tables/", extension="txt", min_size=10 * 1000 * 1000) if not refresh else zips_range
     unzip_primes(portion=unzip)
-    detable = get_reloads("./prime_csvs/", "csv", 11 * 1000 * 1000) if not refresh else zips_range
+    detable = get_reloads("./prime_csvs/", extension="csv", min_size=10 * 1000 * 1000) if not refresh else zips_range
     detable_primes(portion=detable)
 
     print("Done!")
@@ -42,7 +48,7 @@ def unzip_primes(portion=range(1, 50 + 1)):
     new_path = "./prime_tables/"
     for i in portion:
         with ZipFile(old_path + str(i) + ".zip") as zfile:
-            zfile.extract("primes" + str(i) + ".csv", path=new_path)
+            zfile.extract("primes" + str(i) + ".txt", path=new_path)
 
 
 def detable_primes(portion=range(1, 50 + 1)):
@@ -55,6 +61,7 @@ def detable_primes(portion=range(1, 50 + 1)):
                 nums = [num for num in line.strip(" \n").split(" ") if num != ""]
                 if nums:
                     primes.extend(nums)
+        del primes[:6]
         with open(new_path + str(i) + ".csv", "w") as out:
             print(*primes, sep=",", file=out)
 
