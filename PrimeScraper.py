@@ -9,7 +9,7 @@ class PrimeNumbers:
     pass
 
 
-def main(refresh=False):
+def main(refresh=False, verbose=False):
     zips_range = range(1, 50 + 1)
 
     refetch = get_reloads("./prime_zips/", extension="zip", min_size=1500) if not refresh else zips_range
@@ -67,4 +67,4 @@ def detable_primes(portion=range(1, 50 + 1)):
 
 
 if __name__ == "__main__":
-    main(refresh=False)
+    main(refresh=False, verbose=True)
